@@ -38,7 +38,6 @@ darkButton.addEventListener("click", (e) => {
         linesColor = defaultLinesColor;
         bodyText = defaultBodyText;
         heartColor = defaultHeartColor;
-        console.log(isDark)
         localStorage.setItem("dark", false);
 
     }
@@ -50,7 +49,6 @@ darkButton.addEventListener("click", (e) => {
         linesColor = darkLinesColor;
         bodyText = darkBodyText;
         heartColor = darkHeartColor;
-        console.log(isDark)
 
 
         localStorage.setItem("dark", true);
@@ -72,7 +70,6 @@ favButton.addEventListener("click", (e) => {
     }
     else {
         const data = JSON.parse(localStorage.getItem('favorites'));
-
         const favoritesContainer = document.createElement('div');
         favoritesContainer.classList.add('favorites-container', 'position-fixed', 'bottom-0', 'left-0', 'right-0', 'padding-2');
 
@@ -141,9 +138,9 @@ document.addEventListener("DOMContentLoaded",async ()=>{
     let data = await fetch(`${baseURL}/api/courses`);
     data = await data.json();
     await createCards(data);
-    let search = document.querySelector(".search-input");
+    let searchInput = document.querySelector(".search-input");
 
-    search.addEventListener("input",async (e)=>{
+    searchInput.addEventListener("input",async (e)=>{
         if(typeof currentTimeOut === "number"){
             clearTimeout(currentTimeOut);
         }
@@ -157,7 +154,14 @@ document.addEventListener("DOMContentLoaded",async ()=>{
 
 async function search(e){
     const name = e.target.value;
-    let data = await fetch(`${baseURL}/api/courses${name?`?${name}`:""}`);
+    const filter = "";
+    const orderSelect = document.querySelector("#sort");
+    const order = orderSelect.value;
+    const orderAnd = ((name && order)? "&":"");
+    const filterAnd = (name || order) && filter? "&":""
+    let data = await fetch(`${baseURL}/api/courses${(name || order || filter )? "?":"" }${name?`q=${name}`:""}${orderAnd}${order?`order=${order}`:""}${filterAnd}${filter?`filter=${filter}`:""}`);
+    data = await data.json();
+    createCards(data);
 }
 
 
@@ -170,7 +174,6 @@ function createCards(data){
     }
 }
 function createCard(data) {
-    console.log(data);
     const card = document.createElement('div');
     card.className = 'card flex-col';
 
