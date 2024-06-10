@@ -87,6 +87,10 @@ button, a {
 .flex-grow-8{
   flex-grow: 8;
 }
+
+.flex-grow-4{
+  flex-grow: 4;
+}
 .position-relative{
   position: relative;
 }
@@ -364,6 +368,13 @@ label {
   animation: spin 1s linear infinite;
 }
 
+
+
+/* details */
+
+.details_container{
+  max-width: 1000px;
+}
 
 @keyframes spin {
   0% {

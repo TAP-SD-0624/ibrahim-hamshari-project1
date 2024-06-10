@@ -69,7 +69,7 @@ favButton.addEventListener("click", (e) => {
         favAppear = !favAppear
     }
     else {
-        const data = JSON.parse(localStorage.getItem('favorites'));
+        let dataArray = JSON.parse(localStorage.getItem('favorites'));
         const favoritesContainer = document.createElement('div');
         favoritesContainer.classList.add('favorites-container', 'position-fixed', 'bottom-0', 'left-0', 'right-0', 'padding-2');
 
@@ -78,57 +78,60 @@ favButton.addEventListener("click", (e) => {
 
         const heading = document.createElement('h3');
         heading.classList.add('font-weight-3', 'font-medium');
-        heading.textContent = 'My Favorite Topics';
+        heading.textContent = `${dataArray?.length > 0?"My Favorite Topics":"No Favorites Topics"}`;
 
         const favoritesDiv = document.createElement('div');
         favoritesDiv.id = 'favorites';
         favoritesDiv.classList.add('flex-row');
 
-        const favCard = document.createElement('div');
-        favCard.classList.add('fav-card');
-
-        const img = document.createElement('img');
-        img.classList.add('fav-img');
-        img.src = `./assets/img/${data.image}`;
-        img.alt = `${data.topic}`;
-
-        const favBody = document.createElement('div');
-        favBody.classList.add('fav-body');
-
-        const cardDescription = document.createElement('h4');
-        cardDescription.classList.add('font-medium', 'font-weight-3', 'card-disc');
-        cardDescription.textContent = `${data.topic}`;
-
-        const ratingsDiv = document.createElement('div');
-        ratingsDiv.classList.add('ratings');
-
-        const createStarImg = (src, alt) => {
-            const starImg = document.createElement('img');
-            starImg.classList.add('star');
-            starImg.src = src;
-            starImg.alt = alt;
-            return starImg;
-        };
-        const ratings = Math.round(data.rating*2)/2;
-        for(let i = 0 ; i<ratings;i++){
-            ratingsDiv.appendChild(createStarImg('./assets/img/star.svg', 'checked_star'));
-        }
-        if(ratings - Math.floor(ratings) !== 0){
-            ratingsDiv.appendChild(createStarImg('./assets/img/star-half.svg', 'half_star'));
-        }
-        for(let i = 0 ; i<5-Math.ceil(ratings);i++){
-            ratingsDiv.appendChild(createStarImg('./assets/img/star-outline.svg', 'unchecked_star'));
-        }
-
-        favBody.appendChild(cardDescription);
-        favBody.appendChild(ratingsDiv);
-        favCard.appendChild(img);
-        favCard.appendChild(favBody);
-        favoritesDiv.appendChild(favCard);
+        for(let i = 0 ; i<dataArray?.length;i++){
+            const data = dataArray[i];
+            const favCard = document.createElement('div');
+            favCard.classList.add('fav-card');
+    
+            const img = document.createElement('img');
+            img.classList.add('fav-img');
+            img.src = `./assets/img/${data.image}`;
+            img.alt = `${data.topic}`;
+    
+            const favBody = document.createElement('div');
+            favBody.classList.add('fav-body');
+    
+            const cardDescription = document.createElement('h4');
+            cardDescription.classList.add('font-medium', 'font-weight-3', 'card-disc');
+            cardDescription.textContent = `${data.topic}`;
+    
+            const ratingsDiv = document.createElement('div');
+            ratingsDiv.classList.add('ratings');
+    
+            const createStarImg = (src, alt) => {
+                const starImg = document.createElement('img');
+                starImg.classList.add('star');
+                starImg.src = src;
+                starImg.alt = alt;
+                return starImg;
+            };
+            const ratings = Math.round(data.rating*2)/2;
+            for(let i = 0 ; i<ratings;i++){
+                ratingsDiv.appendChild(createStarImg('./assets/img/star.svg', 'checked_star'));
+            }
+            if(ratings - Math.floor(ratings) !== 0){
+                ratingsDiv.appendChild(createStarImg('./assets/img/star-half.svg', 'half_star'));
+            }
+            for(let i = 0 ; i<5-Math.ceil(ratings);i++){
+                ratingsDiv.appendChild(createStarImg('./assets/img/star-outline.svg', 'unchecked_star'));
+            }
+    
+            favBody.appendChild(cardDescription);
+            favBody.appendChild(ratingsDiv);
+            favCard.appendChild(img);
+            favCard.appendChild(favBody);
+            favoritesDiv.appendChild(favCard);
+            
+            }
         flexColContainer.appendChild(heading);
         flexColContainer.appendChild(favoritesDiv);
         favoritesContainer.appendChild(flexColContainer);
-
         document.body.appendChild(favoritesContainer);
         favAppear = !favAppear
     }
@@ -166,6 +169,9 @@ async function search(e){
 
 
 function createCards(data){
+    const cardsTitle = document.querySelector(".cards-head");
+    cardsTitle.textContent = `"${data?data.length:0}" Web Topics Found`
+
     const div = document.querySelector(".cards-body");
     div.innerHTML = "";
     div.classList.remove("spinner_container");

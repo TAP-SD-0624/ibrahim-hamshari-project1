@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap"
+        rel="stylesheet">
+
+
+    <link rel="stylesheet" href="assets/css/variables.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.jpeg">
+    <script src="assets/js/script.js" defer></script>
+    <title>Web Topics</title>
+</head>
+
+<body class="flex-col">
+    <header class="header flex-col position-relative">
+        <nav class="nav padding-3 flex-row justify-between flex-grow-1 z-3">
+            <h4 class="nav-h font-weight-3"><a href="/">Web Topics</a></h3>
+                <ul class="nav-ul flex-row gap-3">
+                    <button id="dark-mode" class="nav-li align-center gap-1 flex-row justify-center"><img
+                            class="nav-img" src="./assets/img/dark-mode.svg" alt="dark_mode"></button>
+                    <button id="fav" class="nav-li align-center gap-1 flex-row justify-center"><img
+                            src="./assets/img/favourites.svg" alt="favorites" class="nav-img"></button>
+                </ul>
+        </nav>
+        <div class="welcome-section position-relative z-1">
+            <div class="right-tri z-1"></div>
+            <div class="left-tri z-2"></div>
+            <div class="welcome flex-row justify-center">
+                <div>
+                    <h2 class="welcome-h font-weight-3">Welcome to our website!</h1>
+                        <p class="welcome-sh font-weight-2">we have a new design that's fresh, modern, and easy to use.
+                        </p>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main flex-grow-1 flex-col padding-3">
+        <div class="details_container align-self-center flex-grow-1 flex-col">
+            <div class="details flex-grow-4">
+                <div class="details_details flex-col">
+                    <h5 class="category">
+
+                    </h5>
+                    <h2 class="topic">
+                        Web development Languages
+                    </h2>
+                    <div class="ratings">
+                        <img class="star" src="./assets//img/star.svg" alt="">
+                        <img class="star" src="./assets//img/star.svg" alt="">
+                        <img class="star" src="./assets//img/star.svg" alt="">
+                        <img class="star" src="./assets//img/star.svg" alt="">
+                        <img class="star" src="./assets//img/star.svg" alt="">
+                    </div>
+                    <div class="description">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi nemo omnis aut nisi amet, ullam
+                        repellendus cum aliquam iste facilis consectetur eaque quia esse porro tenetur obcaecati
+                        exercitationem enim unde!
+                    </div>
+                </div>
+                <div class="details_topics">
+                    <div class="details_topics_header">
+                        HTML Sub Topics
+                    </div>
+                    <div class="details_topics_body">
+                        <div class="details_sub_topics">1</div>
+                        <div class="details_sub_topics">2</div>
+                        <div class="details_sub_topics">3</div>
+                        <div class="details_sub_topics">4</div>
+                        <div class="details_sub_topics">5</div>
+                        <div class="details_sub_topics">6</div>
+                    </div>
+                </div>
+            </div>
+            <div class="details_img_container flex-grow-1">
+                <img src="./assets/img/html.png" alt="">
+                <div class="details_img_body">
+                    <p>HTML by Sarah Smith</p>
+                    <div class="add_to_fav_container">
+                        <p>interested about this topic?</p>
+                        <button>Add to favorites</button>
+                        <span>unlimited credits</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <footer class="footer flex-row justify-center">
+        <p>Developed with <span class="heart">&#10084;</span> <span>&copy;</span> 2023</p>
+    </footer>
+</body>
+
+</html>
