@@ -143,20 +143,30 @@ document.addEventListener("DOMContentLoaded",async ()=>{
     await createCards(data);
     let searchInput = document.querySelector(".search-input");
 
-    searchInput.addEventListener("input",async (e)=>{
+    searchInput.addEventListener("input",async ()=>{
         if(typeof currentTimeOut === "number"){
             clearTimeout(currentTimeOut);
         }
 
         currentTimeOut = setTimeout(async ()=>{
-            await search(e);
-    },2000)
+            search();
+    },500)
     
-    
-})})
+    })})
 
-async function search(e){
-    const name = e.target.value;
+        document.addEventListener("keydown",async (e)=>{
+            if(e.key !=="Enter") return;
+
+            if(typeof currentTimeOut === "number"){
+                clearTimeout(currentTimeOut);
+            }
+
+            search()
+        })
+
+async function search(){
+    const input = document.querySelector(".search-input");
+    const name = input.value;
     const filter = "";
     const orderSelect = document.querySelector("#sort");
     const order = orderSelect.value;
