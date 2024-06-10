@@ -17,6 +17,10 @@ const darkHeartColor = "#DC143C";
 let favAppear = false;
 const darkButton = document.getElementById("dark-mode");
 const favButton = document.getElementById("fav");
+
+let currentTimeOut;
+const baseURL = "http://localhost:3000";
+
 darkButton.addEventListener("click", (e) => {
     const isDark = JSON.parse(localStorage.getItem("dark"));
     let brandPrimary
@@ -108,7 +112,7 @@ favButton.addEventListener("click", (e) => {
             starImg.alt = alt;
             return starImg;
         };
-        const ratings = Math.round(data.ratings*2)/2;
+        const ratings = Math.round(data.rating*2)/2;
         for(let i = 0 ; i<ratings;i++){
             ratingsDiv.appendChild(createStarImg('./assets/img/star.svg', 'checked_star'));
         }
@@ -132,3 +136,106 @@ favButton.addEventListener("click", (e) => {
         favAppear = !favAppear
     }
 })
+
+document.addEventListener("DOMContentLoaded",async ()=>{
+    let data = await fetch(`${baseURL}/api/courses`);
+    data = await data.json();
+    await createCards(data);
+    let search = document.querySelector(".search-input");
+
+    search.addEventListener("input",async (e)=>{
+        if(typeof currentTimeOut === "number"){
+            clearTimeout(currentTimeOut);
+        }
+
+        currentTimeOut = setTimeout(async ()=>{
+            await search(e);
+    },2000)
+    
+    
+})})
+
+async function search(e){
+    const name = e.target.value;
+    let data = await fetch(`${baseURL}/api/courses${name?`?${name}`:""}`);
+}
+
+
+function createCards(data){
+    const div = document.querySelector(".cards-body");
+    div.innerHTML = "";
+    div.classList.remove("spinner_container");
+    for (let i = 0; i < data.length; i++) {
+        createCard(data[i]);
+    }
+}
+function createCard(data) {
+    console.log(data);
+    const card = document.createElement('div');
+    card.className = 'card flex-col';
+
+    const img = document.createElement('img');
+    img.className = 'topic-img';
+    img.src = `./assets/img/${data.image}`;
+    img.alt = `${data.topic}`;
+    card.appendChild(img);
+
+    const cardContent = document.createElement('div');
+    cardContent.className = 'card-content flex-col justify-between flex-grow-1';
+
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body';
+
+    const cardDisc = document.createElement('p');
+    cardDisc.className = 'font-weight-2 font-small card-disc';
+    cardDisc.textContent = `${data.category}`;
+    cardBody.appendChild(cardDisc);
+
+    const cardTitle = document.createElement('h2');
+    cardTitle.className = 'font-medium font-weight-3';
+    cardTitle.textContent = `${data.topic}`;
+    cardBody.appendChild(cardTitle);
+
+    cardContent.appendChild(cardBody);
+
+    const cardFooter = document.createElement('div');
+    cardFooter.className = 'card-footer';
+
+    const ratings = document.createElement('div');
+    ratings.className = 'ratings';
+
+    const stars = [];
+
+    const ratingsNum = Math.round(data.rating*2)/2;
+    for(let i = 0 ; i<ratingsNum;i++){
+        stars.push({src:'./assets/img/star.svg',alt: 'checked_star'});
+    }
+    if(ratingsNum - Math.floor(ratingsNum) !== 0){
+        stars.push({src:'./assets/img/star-half.svg',alt: 'half_star'});
+    }
+    for(let i = 0 ; i<5-Math.ceil(ratingsNum);i++){
+        stars.push({src:'./assets/img/star-outline.svg',alt: 'unchecked_star'});
+    }
+    
+    stars.forEach(starData => {
+        const star = document.createElement('img');
+        star.className = 'star';
+        star.src = starData.src;
+        star.alt = starData.alt;
+        ratings.appendChild(star);
+    });
+
+    cardFooter.appendChild(ratings);
+
+    const author = document.createElement('address');
+    author.className = 'author font-small';
+    author.textContent = 'Author: Daniel Brown';
+    cardFooter.appendChild(author);
+
+    cardContent.appendChild(cardFooter);
+
+    card.appendChild(cardContent);
+
+    document.querySelector(".cards-body").appendChild(card);
+}
+
