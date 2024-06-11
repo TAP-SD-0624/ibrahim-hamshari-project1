@@ -146,9 +146,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!id) {
         let data = await fetch(`${baseURL}/api/courses`);
         data = await data.json();
-        const div = document.querySelector(".cards-body");
-        div.innerHTML = "";
-        div.classList.remove("spinner_container");
         await createCards(data);
 
         let searchInput = document.querySelector(".search-input");
@@ -160,6 +157,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             currentTimeOut = setTimeout(async () => {
                 search();
             }, 500)
+        })
+        let filterByInput = document.querySelector("#filter");
+        filterByInput.addEventListener("change", (e) => {
+            search();
+        })
+        let sortByInput = document.querySelector("#sort");
+        sortByInput.addEventListener("change", (e) => {
+            search();
         })
         let cardsBody = document.querySelector(".cards-body");
         cardsBody.addEventListener("click", (e) => {
@@ -192,6 +197,14 @@ document.addEventListener("keydown", async (e) => {
 })
 
 async function search() {
+    const div = document.querySelector(".cards-body");
+    const cardsHead = document.querySelector(".cards-head");
+    div.innerHTML = "";
+    cardsHead.innerHTML = "";
+    div.classList.add("spinner_container");
+    const spinner = document.createElement("div");
+    spinner.classList.add("spinner")
+    div.appendChild(spinner);
     const input = document.querySelector(".search-input");
     const name = input.value;
     const filter = "";
@@ -199,6 +212,7 @@ async function search() {
     const order = orderSelect.value;
     const orderAnd = ((name && order) ? "&" : "");
     const filterAnd = (name || order) && filter ? "&" : ""
+    console.log(`${baseURL}/api/courses${(name || order || filter) ? "?" : ""}${name ? `q=${name}` : ""}${orderAnd}${order ? `order=${order}` : ""}${filterAnd}${filter ? `filter=${filter}` : ""}`)
     let data = await fetch(`${baseURL}/api/courses${(name || order || filter) ? "?" : ""}${name ? `q=${name}` : ""}${orderAnd}${order ? `order=${order}` : ""}${filterAnd}${filter ? `filter=${filter}` : ""}`);
     data = await data.json();
     createCards(data);
@@ -206,6 +220,10 @@ async function search() {
 
 
 function createCards(data) {
+    const div = document.querySelector(".cards-body");
+    div.innerHTML = "";
+    div.classList.remove("spinner_container");
+    
     const cardsTitle = document.querySelector(".cards-head");
     cardsTitle.textContent = `"${data ? data.length : 0}" Web Topics Found`
     for (let i = 0; i < data.length; i++) {
@@ -368,10 +386,10 @@ function createDetails(data) {
         if (dataArray == null) {
             dataArray = [];
         }
-        if(dataArray.filter(item=>{return item.id == data.id}).length > 0){
+        if (dataArray.filter(item => { return item.id == data.id }).length > 0) {
             return;
         }
-        dataArray.push({image:data.image , topic:data.topic , rating:data.rating, id :data.id})
+        dataArray.push({ image: data.image, topic: data.topic, rating: data.rating, id: data.id })
         localStorage.setItem("favorites", JSON.stringify(dataArray));
     })
     const unlimitedCredits = document.createElement('span');
