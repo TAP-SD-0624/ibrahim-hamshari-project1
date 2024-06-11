@@ -70,6 +70,7 @@ favButton.addEventListener("click", (e) => {
     }
     else {
         let dataArray = JSON.parse(localStorage.getItem('favorites'));
+        console.log(dataArray)
         const favoritesContainer = document.createElement('div');
         favoritesContainer.classList.add('favorites-container', 'position-fixed', 'bottom-0', 'left-0', 'right-0', 'padding-2');
 
@@ -82,7 +83,7 @@ favButton.addEventListener("click", (e) => {
 
         const favoritesDiv = document.createElement('div');
         favoritesDiv.id = 'favorites';
-        favoritesDiv.classList.add('flex-row');
+        favoritesDiv.classList.add('flex-row', 'gap-5');
 
         for (let i = 0; i < dataArray?.length; i++) {
             const data = dataArray[i];
@@ -361,6 +362,18 @@ function createDetails(data) {
     favButton.className = 'details_fav_buttons flex-row align-center gap-2';
     favButton.innerHTML = '<span>Add to Favorites</span><img class="details_fav_icon" src="./assets/img/favourites.svg" alt="fav">';
 
+    favButton.addEventListener('click', (e) => {
+        let dataArray = JSON.parse(localStorage.getItem("favorites"));
+
+        if (dataArray == null) {
+            dataArray = [];
+        }
+        if(dataArray.filter(item=>{return item.id == data.id}).length > 0){
+            return;
+        }
+        dataArray.push({image:data.image , topic:data.topic , rating:data.rating, id :data.id})
+        localStorage.setItem("favorites", JSON.stringify(dataArray));
+    })
     const unlimitedCredits = document.createElement('span');
     unlimitedCredits.className = 'details_unlimited';
     unlimitedCredits.textContent = 'Unlimited credits';
@@ -401,6 +414,4 @@ function createDetails(data) {
 
     const mainContainer = document.getElementsByTagName('main');
     mainContainer[0].append(detailsHeader, detailsTopics);
-
-
 }
