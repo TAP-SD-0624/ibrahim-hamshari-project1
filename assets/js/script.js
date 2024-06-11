@@ -223,7 +223,7 @@ function createCards(data) {
     const div = document.querySelector(".cards-body");
     div.innerHTML = "";
     div.classList.remove("spinner_container");
-    
+
     const cardsTitle = document.querySelector(".cards-head");
     cardsTitle.textContent = `"${data ? data.length : 0}" Web Topics Found`
     for (let i = 0; i < data.length; i++) {
@@ -355,7 +355,7 @@ function createDetails(data) {
     detailsDetails.append(detailsDetailsHeader, description);
 
     const detailsImgContainer = document.createElement('div');
-    detailsImgContainer.className = 'details_img_container flex-grow-1 position-absolute right_300 top-25';
+    detailsImgContainer.className = 'details_img_container flex-grow-1  right_300 top-25';
 
     const detailsImg = document.createElement('img');
     detailsImg.className = 'details_img';
@@ -378,18 +378,23 @@ function createDetails(data) {
 
     const favButton = document.createElement('button');
     favButton.className = 'details_fav_buttons flex-row align-center gap-2';
-    favButton.innerHTML = '<span>Add to Favorites</span><img class="details_fav_icon" src="./assets/img/favourites.svg" alt="fav">';
+    const fav = checkFavorite(data.id);
+    favButton.innerHTML = fav? '<span>Already Favorited</span><img class="details_fav_icon details_heart" src="./assets/img/favourites-full.svg" alt="fav">':'<span>Add to Favorites</span><img class="details_fav_icon" src="./assets/img/favourites.svg" alt="fav">'
 
     favButton.addEventListener('click', (e) => {
         let dataArray = JSON.parse(localStorage.getItem("favorites"));
-
         if (dataArray == null) {
             dataArray = [];
         }
         if (dataArray.filter(item => { return item.id == data.id }).length > 0) {
-            return;
+            dataArray = dataArray.filter(item=>{return item.id != data.id});
+            favButton.innerHTML = '<span>Add to Favorites</span><img class="details_fav_icon" src="./assets/img/favourites.svg" alt="fav">'
+            }
+        else
+        {
+            dataArray.push({ image: data.image, topic: data.topic, rating: data.rating, id: data.id })
+            favButton.innerHTML = '<span>Already Favorited</span><img class="details_fav_icon details_heart" src="./assets/img/favourites-full.svg" alt="fav">'
         }
-        dataArray.push({ image: data.image, topic: data.topic, rating: data.rating, id: data.id })
         localStorage.setItem("favorites", JSON.stringify(dataArray));
     })
     const unlimitedCredits = document.createElement('span');
@@ -432,4 +437,15 @@ function createDetails(data) {
 
     const mainContainer = document.getElementsByTagName('main');
     mainContainer[0].append(detailsHeader, detailsTopics);
+}
+
+function checkFavorite(id){
+    let dataArray = JSON.parse(localStorage.getItem("favorites"));
+    if (dataArray && dataArray.filter(item => { return item.id == id }).length > 0) {
+        return true;
+    }
+    else {
+        return false;
+
+    }
 }

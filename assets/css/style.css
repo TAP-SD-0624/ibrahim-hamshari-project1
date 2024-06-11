@@ -456,6 +456,8 @@ label {
 
 .details_img_container {
   border: 1px solid var(--lines-color);
+  width: 265px;
+  position: absolute;
 }
 
 .details_details * {
@@ -530,6 +532,11 @@ label {
   filter: invert(43%) sepia(91%) saturate(1198%) hue-rotate(84deg) brightness(97%) contrast(105%);
   width: 25px;
 }
+.details_heart{
+  filter: invert(23%) sepia(100%) saturate(7471%) hue-rotate(353deg) brightness(99%) contrast(119%);
+}
+
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -539,8 +546,6 @@ label {
     transform: rotate(360deg);
   }
 }
-
-
 
 
 @media screen and (max-width: 600px) {
