@@ -78,32 +78,32 @@ favButton.addEventListener("click", (e) => {
 
         const heading = document.createElement('h3');
         heading.classList.add('font-weight-3', 'font-medium');
-        heading.textContent = `${dataArray?.length > 0?"My Favorite Topics":"No Favorites Topics"}`;
+        heading.textContent = `${dataArray?.length > 0 ? "My Favorite Topics" : "No Favorites Topics"}`;
 
         const favoritesDiv = document.createElement('div');
         favoritesDiv.id = 'favorites';
         favoritesDiv.classList.add('flex-row');
 
-        for(let i = 0 ; i<dataArray?.length;i++){
+        for (let i = 0; i < dataArray?.length; i++) {
             const data = dataArray[i];
             const favCard = document.createElement('div');
             favCard.classList.add('fav-card');
-    
+
             const img = document.createElement('img');
             img.classList.add('fav-img');
             img.src = `./assets/img/${data.image}`;
             img.alt = `${data.topic}`;
-    
+
             const favBody = document.createElement('div');
             favBody.classList.add('fav-body');
-    
+
             const cardDescription = document.createElement('h4');
             cardDescription.classList.add('font-medium', 'font-weight-3', 'card-disc');
             cardDescription.textContent = `${data.topic}`;
-    
+
             const ratingsDiv = document.createElement('div');
             ratingsDiv.classList.add('ratings');
-    
+
             const createStarImg = (src, alt) => {
                 const starImg = document.createElement('img');
                 starImg.classList.add('star');
@@ -111,24 +111,24 @@ favButton.addEventListener("click", (e) => {
                 starImg.alt = alt;
                 return starImg;
             };
-            const ratings = Math.round(data.rating*2)/2;
-            for(let i = 0 ; i<ratings;i++){
+            const ratings = Math.round(data.rating * 2) / 2;
+            for (let i = 0; i < ratings; i++) {
                 ratingsDiv.appendChild(createStarImg('./assets/img/star.svg', 'checked_star'));
             }
-            if(ratings - Math.floor(ratings) !== 0){
+            if (ratings - Math.floor(ratings) !== 0) {
                 ratingsDiv.appendChild(createStarImg('./assets/img/star-half.svg', 'half_star'));
             }
-            for(let i = 0 ; i<5-Math.ceil(ratings);i++){
+            for (let i = 0; i < 5 - Math.ceil(ratings); i++) {
                 ratingsDiv.appendChild(createStarImg('./assets/img/star-outline.svg', 'unchecked_star'));
             }
-    
+
             favBody.appendChild(cardDescription);
             favBody.appendChild(ratingsDiv);
             favCard.appendChild(img);
             favCard.appendChild(favBody);
             favoritesDiv.appendChild(favCard);
-            
-            }
+
+        }
         flexColContainer.appendChild(heading);
         flexColContainer.appendChild(favoritesDiv);
         favoritesContainer.appendChild(flexColContainer);
@@ -137,50 +137,59 @@ favButton.addEventListener("click", (e) => {
     }
 })
 
-document.addEventListener("DOMContentLoaded",async ()=>{
+document.addEventListener("DOMContentLoaded", async () => {
     let data = await fetch(`${baseURL}/api/courses`);
     data = await data.json();
     await createCards(data);
     let searchInput = document.querySelector(".search-input");
-
-    searchInput.addEventListener("input",async ()=>{
-        if(typeof currentTimeOut === "number"){
+    searchInput.addEventListener("input", async () => {
+        if (typeof currentTimeOut === "number") {
             clearTimeout(currentTimeOut);
         }
 
-        currentTimeOut = setTimeout(async ()=>{
+        currentTimeOut = setTimeout(async () => {
             search();
-    },500)
-    
-    })})
+        }, 500)
+    })
+    let cardsBody = document.querySelector(".cards-body");
+    console.log(cardsBody)
+    cardsBody.addEventListener("click", (e) => {
+        const item = e.target.closest(".card");
+        if (item && cardsBody.contains(item)) {
+            const id = item.getAttribute("data-key");
+            window.location.href = `./details.html?id=${id}`
+        }
 
-        document.addEventListener("keydown",async (e)=>{
-            if(e.key !=="Enter") return;
+    })
+})
 
-            if(typeof currentTimeOut === "number"){
-                clearTimeout(currentTimeOut);
-            }
+document.addEventListener("keydown", async (e) => {
+    if (e.key !== "Enter") return;
 
-            search()
-        })
+    if (typeof currentTimeOut === "number") {
+        clearTimeout(currentTimeOut);
+    }
 
-async function search(){
+    search()
+})
+
+async function search() {
     const input = document.querySelector(".search-input");
     const name = input.value;
     const filter = "";
     const orderSelect = document.querySelector("#sort");
     const order = orderSelect.value;
-    const orderAnd = ((name && order)? "&":"");
-    const filterAnd = (name || order) && filter? "&":""
-    let data = await fetch(`${baseURL}/api/courses${(name || order || filter )? "?":"" }${name?`q=${name}`:""}${orderAnd}${order?`order=${order}`:""}${filterAnd}${filter?`filter=${filter}`:""}`);
+    const orderAnd = ((name && order) ? "&" : "");
+    const filterAnd = (name || order) && filter ? "&" : ""
+    let data = await fetch(`${baseURL}/api/courses${(name || order || filter) ? "?" : ""}${name ? `q=${name}` : ""}${orderAnd}${order ? `order=${order}` : ""}${filterAnd}${filter ? `filter=${filter}` : ""}`);
     data = await data.json();
     createCards(data);
 }
 
 
-function createCards(data){
+function createCards(data) {
     const cardsTitle = document.querySelector(".cards-head");
-    cardsTitle.textContent = `"${data?data.length:0}" Web Topics Found`
+    cardsTitle.textContent = `"${data ? data.length : 0}" Web Topics Found`
 
     const div = document.querySelector(".cards-body");
     div.innerHTML = "";
@@ -189,6 +198,7 @@ function createCards(data){
         createCard(data[i]);
     }
 }
+
 function createCard(data) {
     const card = document.createElement('div');
     card.className = 'card flex-col';
@@ -225,17 +235,17 @@ function createCard(data) {
 
     const stars = [];
 
-    const ratingsNum = Math.round(data.rating*2)/2;
-    for(let i = 0 ; i<ratingsNum;i++){
-        stars.push({src:'./assets/img/star.svg',alt: 'checked_star'});
+    const ratingsNum = Math.round(data.rating * 2) / 2;
+    for (let i = 0; i < ratingsNum; i++) {
+        stars.push({ src: './assets/img/star.svg', alt: 'checked_star' });
     }
-    if(ratingsNum - Math.floor(ratingsNum) !== 0){
-        stars.push({src:'./assets/img/star-half.svg',alt: 'half_star'});
+    if (ratingsNum - Math.floor(ratingsNum) !== 0) {
+        stars.push({ src: './assets/img/star-half.svg', alt: 'half_star' });
     }
-    for(let i = 0 ; i<5-Math.ceil(ratingsNum);i++){
-        stars.push({src:'./assets/img/star-outline.svg',alt: 'unchecked_star'});
+    for (let i = 0; i < 5 - Math.ceil(ratingsNum); i++) {
+        stars.push({ src: './assets/img/star-outline.svg', alt: 'unchecked_star' });
     }
-    
+
     stars.forEach(starData => {
         const star = document.createElement('img');
         star.className = 'star';
@@ -252,9 +262,8 @@ function createCard(data) {
     cardFooter.appendChild(author);
 
     cardContent.appendChild(cardFooter);
-
+    card.setAttribute("data-key", data.id)
     card.appendChild(cardContent);
-
     document.querySelector(".cards-body").appendChild(card);
 }
 
