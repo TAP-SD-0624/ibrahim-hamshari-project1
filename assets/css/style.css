@@ -157,15 +157,15 @@ a {
 }
 
 .font-small {
-  font-size: 12px;
+  font-size: 0.8rem;
 }
 
 .font-medium {
-  font-size: 18px;
+  font-size: 1.3rem;
 }
 
 .font-large {
-  font-size: 28px;
+  font-size: 2rem;
 }
 
 .nav {
