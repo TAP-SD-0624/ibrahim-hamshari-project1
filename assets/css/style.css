@@ -92,7 +92,7 @@ a {
   gap: 6px;
 }
 
-.border-bottom-1{
+.border-bottom-1 {
   border-bottom: 1px solid var(--lines-color);
 }
 
@@ -165,14 +165,16 @@ a {
 }
 
 .font-large {
-  font-size: 2rem;
+  font-size: 1.4rem;
 }
 
 .nav {
   background-color: var(--bg-body);
   box-shadow: 0px 1px 5px var(--transparent-black);
 }
-
+.welcome-section {
+  overflow: hidden;
+}
 .nav-h {
   color: var(--brand-primary);
 
@@ -243,6 +245,10 @@ a {
   padding: 3rem 0 1rem;
 }
 
+.nav_pic_dark {
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(180deg) brightness(100%) contrast(100%);
+
+}
 
 .left-tri {
   position: absolute;
@@ -252,7 +258,7 @@ a {
   width: 120%;
   height: 100%;
   transform: rotate(177deg);
-  background: linear-gradient(to left, var(--brand-primary), var(--brand-secondary));
+  background: linear-gradient(to left, var(--brand-primary), var(--brand-primary-scnd));
 }
 
 .right-tri {
@@ -262,8 +268,7 @@ a {
   width: 120%;
   height: 100%;
   transform: rotate(-177deg);
-  background: linear-gradient(to right, var(--brand-secondary), var(--brand-primary));
-
+  background: linear-gradient(to right, var(--brand-secondary), var(--brand-secondary-primary));
 }
 
 .welcome-h {
@@ -300,6 +305,7 @@ a {
   all: unset;
   width: 100%;
 }
+
 
 .search-filter {
   border-left: 1px solid var(--lines-color);
@@ -344,7 +350,8 @@ label {
   background-color: var(--bg-default);
   border-radius: 2%;
   transition: all 0.3s;
-  max-height: 300px;
+  max-height: 325px;
+  overflow: hidden;
 }
 
 .cards-head {
@@ -446,6 +453,7 @@ label {
 }
 
 
+
 /* details */
 
 .details_container {
@@ -514,25 +522,27 @@ label {
   overflow: hidden;
 }
 
-.details_topics{
+.details_topics {
   margin-top: 30px;
   margin-right: 500px;
 
 }
 
-.details_topics_container{
+.details_topics_container {
   width: 700px;
 }
-.details_topics_body{
+
+.details_topics_body {
   background-color: var(--bg-default);
   box-shadow: 0px 1px 5px var(--lines-color);
 }
 
-.check{
+.check {
   filter: invert(43%) sepia(91%) saturate(1198%) hue-rotate(84deg) brightness(97%) contrast(105%);
   width: 25px;
 }
-.details_heart{
+
+.details_heart {
   filter: invert(23%) sepia(100%) saturate(7471%) hue-rotate(353deg) brightness(99%) contrast(119%);
 }
 
@@ -580,5 +590,34 @@ label {
     width: 100%;
     margin: 0 -15px;
     padding: 0 20px;
+  }
+}
+
+@media screen and (max-width: 1199px) {
+
+
+  .details_img_container {
+    position: static;
+  }
+
+  .details_container {
+    margin-right: 0px;
+    height: fit-content;
+    width: fit-content;
+  }
+  .details_img_container{
+    align-self: flex-start;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .details_topics{
+    margin-right: 0;
+  }
+  .details_container{
+    flex-direction: column;
+  }
+  .details_img_container{
+    align-self: center;
   }
 }

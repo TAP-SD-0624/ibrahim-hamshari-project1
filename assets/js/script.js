@@ -21,8 +21,9 @@ const favButton = document.getElementById("fav");
 let currentTimeOut;
 const baseURL = "http://localhost:3000";
 
-darkButton.addEventListener("click", (e) => {
-    const isDark = JSON.parse(localStorage.getItem("dark"));
+const changingTheme = (isChanging) => {
+    let isDark = JSON.parse(localStorage.getItem("dark"));
+    isDark = isChanging ? isDark : !isDark
     let brandPrimary
     let brandSecondary
     let bgDefault
@@ -38,6 +39,14 @@ darkButton.addEventListener("click", (e) => {
         linesColor = defaultLinesColor;
         bodyText = defaultBodyText;
         heartColor = defaultHeartColor;
+        const fav = document.querySelector("#fav-img");
+        fav.classList.remove("nav_pic_dark");
+        const dark = document.querySelector("#dark-img")
+        dark.classList.remove("nav_pic_dark");
+        const select = document.querySelectorAll("select");
+        select.forEach((element) => {
+            element.style.backgroundColor = "white";
+        })
         localStorage.setItem("dark", false);
 
     }
@@ -49,9 +58,16 @@ darkButton.addEventListener("click", (e) => {
         linesColor = darkLinesColor;
         bodyText = darkBodyText;
         heartColor = darkHeartColor;
-
-
+        const fav = document.querySelector("#fav-img");
+        fav.classList.add("nav_pic_dark");
+        const dark = document.querySelector("#dark-img")
+        dark.classList.add("nav_pic_dark");
+        const select = document.querySelectorAll("select");
+        select.forEach((element) => {
+            element.style.backgroundColor = "var(--other-color)";
+        })
         localStorage.setItem("dark", true);
+
     }
     document.documentElement.style.setProperty('--brand-primary', brandPrimary);
     document.documentElement.style.setProperty('--brand-secondary', brandSecondary);
@@ -60,12 +76,21 @@ darkButton.addEventListener("click", (e) => {
     document.documentElement.style.setProperty('--lines-color', linesColor);
     document.documentElement.style.setProperty('--body-text', bodyText);
     document.documentElement.style.setProperty('--heart-color', heartColor);
-})
 
+};
+changingTheme(false);
+darkButton.addEventListener("click", changingTheme)
 
-favButton.addEventListener("click", (e) => {
+const togglingFav = (_, closing) => {
+    const favContainer = document.getElementsByClassName('favorites-container')[0];
+    if (closing) {
+        if (favContainer)
+            document.body.removeChild(favContainer);
+        favAppear = false;
+        return;
+    }
     if (favAppear) {
-        document.body.removeChild(document.getElementsByClassName('favorites-container')[0]);
+        document.body.removeChild(favContainer);
         favAppear = !favAppear
     }
     else {
@@ -136,7 +161,8 @@ favButton.addEventListener("click", (e) => {
         document.body.appendChild(favoritesContainer);
         favAppear = !favAppear
     }
-})
+}
+favButton.addEventListener("click", togglingFav)
 
 document.addEventListener("DOMContentLoaded", async () => {
     const currentUrl = window.location.href;
@@ -300,8 +326,6 @@ function createCard(data) {
 }
 
 function createDetails(data) {
-    console.log(data);
-
     const detailsHeader = document.createElement('div');
     detailsHeader.className = 'details_header flex-row justify-center';
 
@@ -379,7 +403,7 @@ function createDetails(data) {
     const favButton = document.createElement('button');
     favButton.className = 'details_fav_buttons flex-row align-center gap-2';
     const fav = checkFavorite(data.id);
-    favButton.innerHTML = fav? '<span>Already Favorited</span><img class="details_fav_icon details_heart" src="./assets/img/favourites-full.svg" alt="fav">':'<span>Add to Favorites</span><img class="details_fav_icon" src="./assets/img/favourites.svg" alt="fav">'
+    favButton.innerHTML = fav ? '<span>Already Favorited</span><img class="details_fav_icon details_heart" src="./assets/img/favourites-full.svg" alt="fav">' : '<span>Add to Favorites</span><img class="details_fav_icon" src="./assets/img/favourites.svg" alt="fav">'
 
     favButton.addEventListener('click', (e) => {
         let dataArray = JSON.parse(localStorage.getItem("favorites"));
@@ -387,14 +411,14 @@ function createDetails(data) {
             dataArray = [];
         }
         if (dataArray.filter(item => { return item.id == data.id }).length > 0) {
-            dataArray = dataArray.filter(item=>{return item.id != data.id});
+            dataArray = dataArray.filter(item => { return item.id != data.id });
             favButton.innerHTML = '<span>Add to Favorites</span><img class="details_fav_icon" src="./assets/img/favourites.svg" alt="fav">'
-            }
-        else
-        {
+        }
+        else {
             dataArray.push({ image: data.image, topic: data.topic, rating: data.rating, id: data.id })
             favButton.innerHTML = '<span>Already Favorited</span><img class="details_fav_icon details_heart" src="./assets/img/favourites-full.svg" alt="fav">'
         }
+        togglingFav(null, true);
         localStorage.setItem("favorites", JSON.stringify(dataArray));
     })
     const unlimitedCredits = document.createElement('span');
@@ -439,7 +463,7 @@ function createDetails(data) {
     mainContainer[0].append(detailsHeader, detailsTopics);
 }
 
-function checkFavorite(id){
+function checkFavorite(id) {
     let dataArray = JSON.parse(localStorage.getItem("favorites"));
     if (dataArray && dataArray.filter(item => { return item.id == id }).length > 0) {
         return true;

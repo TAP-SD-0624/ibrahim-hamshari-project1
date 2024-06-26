@@ -1,6 +1,8 @@
 :root{
     --brand-primary: #0768AC;
+    --brand-primary-scnd:#04A38E;
     --brand-secondary: #03c180;
+    --brand-secondary-primary: #067AA4;
     --bg-default: #FFFFFF;
     --bg-body: #F0F9FF;
     --lines-color: #DDDDDD;
